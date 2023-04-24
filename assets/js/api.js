@@ -7,3 +7,6 @@ const fetchDataFromServer = function (url, callback, optionalParam) {
     .then((data) => callback(data, optionalParam));
 };
 export{imgBaseURL,api_key,fetchDataFromServer}
+
+
+const pageContent = document.querySelector ("[page-content]")

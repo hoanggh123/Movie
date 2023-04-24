@@ -152,4 +152,5 @@ Puss in Boots
 /*P5.1:Danh sách phim*(Chi tiết phim)*/
 /*P6:Tất cả loại phim*/
 /*P7:Call API*/
-
+/*P7.1:Hiệu ứng thanh menu*/
+/*7.2:*/
