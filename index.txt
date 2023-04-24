@@ -151,4 +151,5 @@ Puss in Boots
 /*P5:Danh sách phim(tạm dừng để chửi nhau 😠)*/
 /*P5.1:Danh sách phim*(Chi tiết phim)*/
 /*P6:Tất cả loại phim*/
+/*P7:Call API*/
 
