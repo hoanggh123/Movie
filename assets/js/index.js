@@ -82,7 +82,6 @@ const heroBanner = function ({ results: movieList }) {
         loading="${index === 0 ? "eager" : "lazy"}"
       />
       <div class="banner-content">
-
         <h2 class="heading">${title}</h2>
 
         <div class="meta-list">
@@ -91,7 +90,7 @@ const heroBanner = function ({ results: movieList }) {
         </div>
         <p class="genre">${genreList.asString(genre_ids)}</p>
         <p class="banner-text">${overview}</p>
-        <a href="detail.html" class="btn">
+        <a href="detail.html" class="btn" onclick="getMovieDetail(${id})">
           <img
             src="assets/images/play_circle.png"
             width="24px"

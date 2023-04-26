@@ -283,7 +283,7 @@ body {
   border-block-start: 1px solid var(--banner-background);
   overflow-y: overlay;
   visibility: hidden;
-  z-index: 4;
+  z-index: 99;
   transition: var(--transition-long);
 }
 
@@ -536,7 +536,7 @@ body {
   position: absolute;
   bottom: 20px;
   left: 20px;
-  right: 0;
+  right: 20px;
   box-sizing: var(--radius-16) 0 0 var(--radius-16);
   user-select: none;
   padding: 4px 4px 4px;
@@ -718,15 +718,14 @@ body {
   background-color: var(--white-alpha-20);
 }
 .video-card {
-  background-image: url('../images/video-bg-icon.png');
+
   background-repeat: no-repeat;
   aspect-ratio: 16/9;
   flex-shrink: 0;
   max-width: 500px;
   width: calc(100% - 40px);
-  background-color: var(--banner-background);
 }
-sidebar
+
 /*Tất cả loại phim*/
 
 .genre-list .title-wrapper{

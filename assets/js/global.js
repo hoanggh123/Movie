@@ -16,3 +16,6 @@ addEventOnElements(searchClosers, "click", () => {
   searchBox.classList.remove("active");
 });
 
+const getMovieDetail = function (movieId) {
+  window.localStorage.setItem("movieId", String(movieId));
+};

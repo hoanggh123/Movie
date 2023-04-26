@@ -1,4 +1,5 @@
 "use strict";
+
 import { imgBaseURL } from "./api.js";
 export function createMovieCard(movie) {
   const { poster_path, title, vote_average, release_date, id } = movie;
@@ -28,7 +29,12 @@ export function createMovieCard(movie) {
       </div>
       <div class="card-badge">${release_date.split("-")[0]}</div>
     </div>
-    <a href="detail.html" class="card-btn" title="${title}"></a>
+    <a
+      href="detail.html"
+      class="card-btn"
+      title="${title}"
+      onclick="getMovieDetail(${id})"
+    ></a>
   `;
   return card;
 }
