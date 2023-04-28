@@ -1,57 +1,48 @@
 "use strict";
 import { sidebar } from "./sidebar.js";
-import { api_key, imgBaseURL, fetchDataFromServer } from "./api.js";
+import { api_key, imageBaseURL, fetchDataFromServer } from "./api.js";
 import { createMovieCard } from "./movie-card.js";
-
+const pageContent = document.querySelector("[page-content]");
 sidebar();
-
 const homePageSections = [
   {
-    title: "Upcoming Movies",
+    title: "Phim sắp chiếu",
     path: "/movie/upcoming",
   },
   {
-    title: "Today's Trending Movies",
+    title: "Phim thịnh hành hàng tuần",
     path: "/trending/movie/week",
   },
   {
-    title: "Top Rated Movies",
+    title: "Phim được xếp hạng cao nhất",
     path: "/movie/top_rated",
   },
 ];
-
-const pageContent = document.querySelector("[page-content]");
 const genreList = {
   asString(genreIdList) {
     let newGenreList = [];
     for (const genreId of genreIdList) {
       this[genreId] && newGenreList.push(this[genreId]);
-      // this == genreList
     }
-
     return newGenreList.join(", ");
   },
 };
-
 fetchDataFromServer(
-  `https://api.themoviedb.org/3/genre/movie/list?api_key=${api_key}`,
+  `https://api.themoviedb.org/3/genre/movie/list?api_key=${api_key}&language=vi`,
   function ({ genres }) {
     for (const { id, name } of genres) {
       genreList[id] = name;
     }
-
     fetchDataFromServer(
-      `https://api.themoviedb.org/3/movie/popular?api_key=${api_key}&page=1`,
+      `https://api.themoviedb.org/3/movie/popular?api_key=${api_key}&page=1&language=vi`,
       heroBanner
     );
   }
 );
-
 const heroBanner = function ({ results: movieList }) {
   const banner = document.createElement("section");
   banner.classList.add("banner");
   banner.ariaLabel = "Popular Movies";
-
   banner.innerHTML = `
     <div class="banner-slider"></div>
     <div class="slider-control">
@@ -75,60 +66,41 @@ const heroBanner = function ({ results: movieList }) {
     sliderItem.setAttribute("slider-item", "");
 
     sliderItem.innerHTML = `
-      <img
-        src="${imgBaseURL}w1280${backdrop_path}"
-        alt="${title}"
-        class="img-cover"
-        loading="${index === 0 ? "eager" : "lazy"}"
-      />
+      <img src="${imageBaseURL}w1280${backdrop_path}" alt="${title}" class="img-cover" loading=${
+      index === 0 ? "eager" : "lazy"
+    }>
       <div class="banner-content">
         <h2 class="heading">${title}</h2>
-
         <div class="meta-list">
-          <div class="meta-item">${release_date.split("-")[0]}</div>
-          <div class="meta-item card-barge">${vote_average.toFixed(1)}</div>
+          <div class="meta-item">${
+            release_date?.split("-")[0] ?? "Not Released"
+          }</div>
+          <div class="meta-item card-badge">${vote_average.toFixed(1)}</div>
         </div>
         <p class="genre">${genreList.asString(genre_ids)}</p>
         <p class="banner-text">${overview}</p>
-        <a href="detail.html" class="btn" onclick="getMovieDetail(${id})">
-          <img
-            src="assets/images/play_circle.png"
-            width="24px"
-            height="24px"
-            aria-hidden="true"
-            alt="play cirle"
-          />
+        <a href="./detail.html" class="btn" onclick="getMovieDetail(${id})">
+          <img src="./assets/images/play_circle.png" width="24" height="24" aria-hidden="true" alt="play circle">
           <span class="span">Watch Now</span>
         </a>
       </div>
     `;
-
     banner.querySelector(".banner-slider").appendChild(sliderItem);
-
     const controlItem = document.createElement("button");
-
     controlItem.classList.add("poster-box", "slider-item");
     controlItem.setAttribute("slider-control", `${controlItemIndex}`);
-
     controlItemIndex++;
-
     controlItem.innerHTML = `
-      <img
-        src="${imgBaseURL}w154${poster_path}"
-        class="img-cover"
-        alt="Slide to ${title}"
-        loading="lazy"
-        draggable="false"
-      />
+      <img src="${imageBaseURL}w154${poster_path}" alt="Slide to ${title}" loading="lazy" draggable="false" class="img-cover">
     `;
     banner.querySelector(".control-inner").appendChild(controlItem);
   }
-
   pageContent.appendChild(banner);
   addHeroSlide();
+  /*top rated, upcoming, trending*/
   for (const { title, path } of homePageSections) {
     fetchDataFromServer(
-      `https://api.themoviedb.org/3${path}?api_key=${api_key}&page=1`,
+      `https://api.themoviedb.org/3${path}?api_key=${api_key}&page=1&language=vi`,
       createMovieList,
       title
     );
@@ -137,20 +109,18 @@ const heroBanner = function ({ results: movieList }) {
 const addHeroSlide = function () {
   const sliderItems = document.querySelectorAll("[slider-item]");
   const sliderControls = document.querySelectorAll("[slider-control]");
-  let lastSliderItems = sliderItems[0];
+  let lastSliderItem = sliderItems[0];
   let lastSliderControl = sliderControls[0];
-  lastSliderItems.classList.add("active");
+  lastSliderItem.classList.add("active");
   lastSliderControl.classList.add("active");
-
   const sliderStart = function () {
-    lastSliderItems.classList.remove("active");
+    lastSliderItem.classList.remove("active");
     lastSliderControl.classList.remove("active");
-
     sliderItems[Number(this.getAttribute("slider-control"))].classList.add(
       "active"
     );
     this.classList.add("active");
-    lastSliderItems = sliderItems[Number(this.getAttribute("slider-control"))];
+    lastSliderItem = sliderItems[Number(this.getAttribute("slider-control"))];
     lastSliderControl = this;
   };
   addEventOnElements(sliderControls, "click", sliderStart);
@@ -163,14 +133,12 @@ const createMovieList = function ({ results: movieList }, title) {
     <div class="title-wrapper">
       <h3 class="title-large">${title}</h3>
     </div>
-
     <div class="slider-list">
       <div class="slider-inner"></div>
     </div>
   `;
-
   for (const movie of movieList) {
-    const movieCard = createMovieCard(movie);
+    const movieCard = createMovieCard(movie); // called from movie_card.js
     movieListElem.querySelector(".slider-inner").appendChild(movieCard);
   }
   pageContent.appendChild(movieListElem);
